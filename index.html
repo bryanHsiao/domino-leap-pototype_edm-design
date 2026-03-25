@@ -543,32 +543,38 @@ body {
 
 .url-error.show { display: block; }
 
-/* ═══ INSPIRATION PANEL (RIGHT SIDE) ═══ */
+/* ═══ INSPIRATION PANEL (right side, collapsible) ═══ */
 .inspiration-panel {
   position: absolute;
-  top: 16px;
+  top: 50px;
   right: 16px;
+  z-index: 5;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  z-index: 10;
-  max-height: calc(100% - 32px);
+  width: 180px;
+  max-height: calc(100% - 66px);
   overflow-y: auto;
-  overflow-x: visible;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-m);
+  padding: 10px;
+  transition: width 250ms var(--ease-out), padding 250ms var(--ease-out);
 }
 
 .inspiration-panel::-webkit-scrollbar { width: 0; }
 
+/* ── Header ── */
 .insp-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 12px;
-  background: var(--surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 100px;
-  box-shadow: var(--shadow-s);
-  width: fit-content;
+  gap: 5px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 2px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .insp-header svg { width: 13px; height: 13px; color: var(--accent); flex-shrink: 0; }
@@ -586,22 +592,55 @@ body {
   white-space: nowrap;
 }
 
+.insp-chevron {
+  width: 14px !important;
+  height: 14px !important;
+  color: var(--ink-muted) !important;
+  margin-left: auto;
+  transition: transform 250ms var(--ease-out);
+  flex-shrink: 0;
+}
+
+/* ── Body ── */
+.insp-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Collapsed ── */
+.inspiration-panel.collapsed {
+  width: 44px;
+  padding: 10px 10px;
+  overflow: hidden;
+}
+
+.inspiration-panel.collapsed .insp-header {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  justify-content: center;
+}
+
+.inspiration-panel.collapsed .insp-header-text,
+.inspiration-panel.collapsed .insp-header-hint { display: none; }
+.inspiration-panel.collapsed .insp-body { display: none; }
+.inspiration-panel.collapsed .insp-chevron { margin-left: 0; transform: rotate(180deg); }
+
 .insp-card {
-  width: 152px;
+  width: 100%;
   border-radius: var(--radius-m);
   overflow: hidden;
   cursor: pointer;
   border: 1.5px solid var(--border-subtle);
   transition: all var(--duration) var(--ease-out);
-  background: var(--surface);
-  box-shadow: var(--shadow-s);
+  background: var(--surface-raised);
   position: relative;
 }
 
 .insp-card:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: var(--shadow-l);
   border-color: var(--accent);
+  background: var(--accent-soft);
 }
 
 .insp-card-img {
@@ -771,6 +810,7 @@ body {
   right: 16px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   padding: 6px 12px;
   background: var(--surface);
@@ -779,6 +819,7 @@ body {
   font-size: 11px;
   color: var(--ink-secondary);
   box-shadow: var(--shadow-xs);
+  width: 180px;
 }
 
 .preview-badge .dot {
@@ -902,6 +943,52 @@ body {
 .dm[data-t="6"] .dm-h1 { font-family: 'Cormorant Garamond', 'Noto Serif TC', serif; font-weight: 700; font-size: clamp(1.3rem, 4.5vw, 2.8rem); line-height: 1.15; color: #F5F0E8; margin-bottom: 3%; position: relative; z-index: 2; letter-spacing: 0.02em; }
 .dm[data-t="6"] .dm-p { font-family: 'DM Sans', sans-serif; font-size: clamp(0.45rem, 1vw, 0.72rem); color: rgba(245,240,232,0.35); line-height: 1.8; max-width: 75%; margin-bottom: 5%; position: relative; z-index: 2; }
 .dm[data-t="6"] .dm-cta { display: inline-flex; padding: 2% 5%; border: 1px solid; font-weight: 500; font-size: clamp(0.45rem, 1vw, 0.7rem); text-transform: uppercase; letter-spacing: 0.2em; position: relative; z-index: 2; }
+
+/* ════════════════════════════════════════
+   LANDSCAPE OVERRIDES (banner / 16:9)
+   When data-orient="landscape" is set on .dm
+   ════════════════════════════════════════ */
+
+/* T1 現代簡約: vertical stack → horizontal split */
+.dm[data-orient="landscape"][data-t="1"] { flex-direction: row; }
+.dm[data-orient="landscape"][data-t="1"] .dm-img { height: 100%; width: 45%; flex-shrink: 0; }
+.dm[data-orient="landscape"][data-t="1"] .dm-body { padding: 5% 6%; }
+
+/* T2 暗夜霓虹: circle image → right side rectangle */
+.dm[data-orient="landscape"][data-t="2"] .dm-img { top: 10%; right: 5%; width: 28%; aspect-ratio: 4/3; border-radius: var(--radius-m); border: 2px solid rgba(255,255,255,0.1); }
+.dm[data-orient="landscape"][data-t="2"] .dm-body { padding: 6% 6% 8%; }
+.dm[data-orient="landscape"][data-t="2"] .dm-p { max-width: 55%; }
+
+/* T3 書院風雅: center → left-text + right-image */
+.dm[data-orient="landscape"][data-t="3"] { flex-direction: row; text-align: left; align-items: stretch; padding: 0; }
+.dm[data-orient="landscape"][data-t="3"] .dm-img { width: 42%; aspect-ratio: auto; height: 100%; border-radius: 0; margin-bottom: 0; order: 2; }
+.dm[data-orient="landscape"][data-t="3"] .dm-rule { margin-bottom: 3%; }
+.dm[data-orient="landscape"][data-t="3"] .dm-h2 { text-align: left; }
+.dm[data-orient="landscape"][data-t="3"] .dm-h1 { text-align: left; margin-bottom: 3%; }
+.dm[data-orient="landscape"][data-t="3"] .dm-p { margin: 0 0 4%; max-width: 100%; text-align: left; }
+.dm[data-orient="landscape"][data-t="3"] .dm-cta { align-self: flex-start; }
+.dm[data-orient="landscape"][data-t="3"] .dm-rule-bottom { display: none; }
+/* Wrap text elements in a flex column for landscape T3 — handled via a wrapper approach in CSS */
+.dm[data-orient="landscape"][data-t="3"] { flex-wrap: wrap; align-content: center; padding-left: 8%; gap: 0; }
+
+/* T4 商務雙欄: already horizontal, just adjust proportions */
+.dm[data-orient="landscape"][data-t="4"] { grid-template-columns: 1fr 1fr; }
+.dm[data-orient="landscape"][data-t="4"] .dm-body { padding: 6% 8%; }
+
+/* T5 柔彩卡片: card goes horizontal inside */
+.dm[data-orient="landscape"][data-t="5"] .dm-card { flex-direction: row; text-align: left; width: 92%; padding: 5%; gap: 5%; }
+.dm[data-orient="landscape"][data-t="5"] .dm-img { width: 35%; aspect-ratio: auto; height: 100%; margin-bottom: 0; flex-shrink: 0; }
+.dm[data-orient="landscape"][data-t="5"] .dm-h1 { text-align: left; }
+.dm[data-orient="landscape"][data-t="5"] .dm-h2 { text-align: left; }
+.dm[data-orient="landscape"][data-t="5"] .dm-p { text-align: left; max-width: 100%; }
+
+/* T6 奢華暗金: image + text side by side */
+.dm[data-orient="landscape"][data-t="6"] { flex-direction: row; text-align: left; padding: 6% 8%; gap: 6%; }
+.dm[data-orient="landscape"][data-t="6"] .dm-img { width: 30%; aspect-ratio: 3/4; margin-bottom: 0; flex-shrink: 0; }
+.dm[data-orient="landscape"][data-t="6"] .dm-h2 { text-align: left; }
+.dm[data-orient="landscape"][data-t="6"] .dm-h1 { text-align: left; }
+.dm[data-orient="landscape"][data-t="6"] .dm-p { max-width: 100%; text-align: left; }
+.dm[data-orient="landscape"][data-t="6"] .dm-cta { align-self: flex-start; }
 
 /* ═══ EXPORT LOADING ═══ */
 .btn.loading { pointer-events: none; opacity: 0.6; }
@@ -1130,18 +1217,23 @@ function shiftHue(hex, deg) {
 /* ═══ RENDER ═══ */
 function render() {
   const t = S.tpl, c = S.cp, bg = S.cb;
-  const imgTag = S.img ? `<img src="${S.img}" alt="圖片">` : phSvg;
+  // Use sizedImg for Unsplash URLs, fallback to S.img for other URLs / data URIs
+  const displayImg = sizedImg() || S.img;
+  const imgTag = displayImg ? `<img src="${displayImg}" alt="圖片">` : phSvg;
   const bgDark = isDark(bg);
   const textCol = bgDark ? '#F1F0EE' : '#1C1917';
   const textMuted = bgDark ? 'rgba(241,240,238,0.45)' : 'rgba(28,25,23,0.45)';
 
   dm.setAttribute('data-t', t);
+  // Set orientation for landscape CSS overrides
+  const isLandscape = S.size === 'wide' || S.size === 'banner';
+  dm.setAttribute('data-orient', isLandscape ? 'landscape' : 'portrait');
   let html = '';
 
   switch(t) {
     case 1:
       html = `
-        <div class="dm-img">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%;background:#F0EBE3"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+        <div class="dm-img">${displayImg ? `<img src="${displayImg}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%;background:#F0EBE3"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
         <div class="dm-body">
           <div class="dm-bar" style="background:${c}"></div>
           <div class="dm-h1">${esc(S.title)}</div>
@@ -1156,7 +1248,7 @@ function render() {
       html = `
         <div class="dm-bg-circle" style="background:${c}"></div>
         <div class="dm-bg-circle" style="background:${shiftHue(c,60)}"></div>
-        <div class="dm-img">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%;background:rgba(255,255,255,0.08)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+        <div class="dm-img">${displayImg ? `<img src="${displayImg}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%;background:rgba(255,255,255,0.08)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
         <div class="dm-body">
           <div class="dm-tag" style="background:${c}">${esc(S.sub)}</div>
           <div class="dm-h1">${esc(S.title)}</div>
@@ -1171,7 +1263,7 @@ function render() {
         <div class="dm-rule" style="background:${c}"></div>
         <div class="dm-h2" style="color:${textCol}">${esc(S.sub)}</div>
         <div class="dm-h1" style="color:${textCol}">${esc(S.title)}</div>
-        <div class="dm-img" style="background:${bgDark?'rgba(255,255,255,0.05)':'#F0EBE3'}">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${bgDark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)'}" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+        <div class="dm-img" style="background:${bgDark?'rgba(255,255,255,0.05)':'#F0EBE3'}">${displayImg ? `<img src="${displayImg}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${bgDark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)'}" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
         <div class="dm-p" style="color:${textMuted}">${esc(S.desc)}</div>
         <div class="dm-cta" style="border-color:${c};color:${c}">${esc(S.cta)}</div>
         <div class="dm-rule-bottom" style="background:${c}"></div>`;
@@ -1181,7 +1273,7 @@ function render() {
     case 4: {
       const bodyBg = bgDark ? bg : '#F8F9FA';
       html = `
-        <div class="dm-img" style="background:${bgDark?'rgba(255,255,255,0.03)':'#ECEAE7'}">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="${bgDark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.1)'}" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+        <div class="dm-img" style="background:${bgDark?'rgba(255,255,255,0.03)':'#ECEAE7'}">${displayImg ? `<img src="${displayImg}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="${bgDark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.1)'}" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
         <div class="dm-body" style="background:${bodyBg}">
           <div class="dm-h2" style="color:${textCol}">${esc(S.sub)}</div>
           <div class="dm-h1" style="color:${textCol}">${esc(S.title)}</div>
@@ -1198,7 +1290,7 @@ function render() {
         <div class="dm-blob1" style="background:${lighten(c,0.5)}"></div>
         <div class="dm-blob2" style="background:${lighten(shiftHue(c,60),0.5)}"></div>
         <div class="dm-card">
-          <div class="dm-img" style="background:${lighten(c,0.92)}">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+          <div class="dm-img" style="background:${lighten(c,0.92)}">${displayImg ? `<img src="${displayImg}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
           <div class="dm-h1">${esc(S.title)}</div>
           <div class="dm-h2">${esc(S.sub)}</div>
           <div class="dm-p">${esc(S.desc)}</div>
@@ -1211,7 +1303,7 @@ function render() {
       html = `
         <div class="dm-line-top" style="background:linear-gradient(90deg,transparent,${c},transparent)"></div>
         <div class="dm-line-bot" style="background:linear-gradient(90deg,transparent,${c},transparent)"></div>
-        <div class="dm-img" style="border:0.5px solid ${alpha(c,0.25)}">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%;background:${alpha(c,0.04)}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${alpha(c,0.2)}" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+        <div class="dm-img" style="border:0.5px solid ${alpha(c,0.25)}">${displayImg ? `<img src="${displayImg}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%;background:${alpha(c,0.04)}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${alpha(c,0.2)}" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
         <div class="dm-h2" style="color:${c}">${esc(S.sub)}</div>
         <div class="dm-h1">${esc(S.title)}</div>
         <div class="dm-p">${esc(S.desc)}</div>
@@ -1383,73 +1475,100 @@ window.resetAll = function() {
   render();
 };
 
+/* ═══ UNSPLASH HELPER ═══ */
+// Extract base Unsplash URL (strip existing params) and rebuild with size
+function unsplashSized(url, w, h) {
+  if (!url || !url.includes('images.unsplash.com')) return url;
+  const base = url.split('?')[0];
+  return `${base}?w=${w}&h=${h}&fit=crop&q=80`;
+}
+
+// Get appropriate image dimensions for current size
+function imgDims() {
+  switch (S.size) {
+    case 'a4':     return { w: 800, h: 1000 };
+    case 'square': return { w: 800, h: 800 };
+    case 'banner': return { w: 1200, h: 628 };
+    case 'wide':   return { w: 1200, h: 675 };
+    default:       return { w: 800, h: 800 };
+  }
+}
+
+// Resize S.img if it's an Unsplash URL
+function sizedImg() {
+  if (!S.img) return null;
+  const d = imgDims();
+  return unsplashSized(S.img, d.w, d.h);
+}
+
 /* ═══ EXAMPLES (per-template) ═══ */
+// img stores base Unsplash photo URL (no params) — sized dynamically at render
 const TPL_EXAMPLES = {
   1: [
-    { label: '春季課程招生', badge: '課程', thumb: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=300&h=225&fit=crop',
+    { label: '春季課程招生', badge: '課程',
       title: '探索無限可能', sub: '2026 春季精選課程', desc: '全新課程陣容，涵蓋 AI、設計、程式開發等熱門領域。由業界專家親自授課，實戰導向的學習體驗。', cta: '立即報名 →',
-      img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80', cp: '#1C1917', cb: '#FFFFFF' },
-    { label: '設計思考工作坊', badge: '工作坊', thumb: 'https://images.unsplash.com/photo-1531498860502-7c67cf02f657?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f', cp: '#1C1917', cb: '#FFFFFF' },
+    { label: '設計思考工作坊', badge: '工作坊',
       title: '設計思考\n實戰工作坊', sub: '從洞察到創新的方法論', desc: '兩天沉浸式體驗，學習 Stanford d.school 設計思考五步驟。帶領你的團隊找到真正的使用者痛點。', cta: '了解更多 →',
-      img: 'https://images.unsplash.com/photo-1531498860502-7c67cf02f657?w=800&q=80', cp: '#2563EB', cb: '#FFFFFF' },
-    { label: '程式語言入門', badge: '線上', thumb: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1531498860502-7c67cf02f657', cp: '#2563EB', cb: '#FFFFFF' },
+    { label: '程式語言入門', badge: '線上',
       title: 'Python\n零基礎入門', sub: '線上直播 · 8 週完整課程', desc: '從零開始學 Python，涵蓋語法基礎、資料分析到自動化腳本。每週作業批改，助教即時解答。', cta: '免費試聽 →',
-      img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=80', cp: '#059669', cb: '#FFFFFF' }
+      img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6', cp: '#059669', cb: '#FFFFFF' }
   ],
   2: [
-    { label: '科技論壇', badge: '活動', thumb: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=225&fit=crop',
+    { label: '科技論壇', badge: '活動',
       title: 'Future\nTech 2026', sub: '年度科技論壇', desc: '集結全球頂尖科技領袖，探討 AI、區塊鏈、量子運算的未來趨勢。三天密集議程，超過 50 場精彩演講。', cta: '搶先報名 →',
-      img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80', cp: '#E94560', cb: '#1A1A2E' },
-    { label: '音樂節', badge: '演出', thumb: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87', cp: '#E94560', cb: '#1A1A2E' },
+    { label: '音樂節', badge: '演出',
       title: '城市之聲\n音樂節', sub: '2026 夏季限定', desc: '三天兩夜的音樂盛宴，集結 20 組國內外樂團。電子、搖滾、爵士，讓音樂點亮你的夏夜。', cta: '購票去 →',
-      img: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80', cp: '#8B5CF6', cb: '#1E1B4B' },
-    { label: 'AI 黑客松', badge: '競賽', thumb: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea', cp: '#8B5CF6', cb: '#1E1B4B' },
+    { label: 'AI 黑客松', badge: '競賽',
       title: 'AI Hack\nDay 2026', sub: '48 小時創意馬拉松', desc: '用 AI 解決真實問題。獎金池超過 50 萬，頂尖業師評審。組隊或個人皆可參加。', cta: '立即報名 →',
-      img: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80', cp: '#06B6D4', cb: '#0F172A' }
+      img: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d', cp: '#06B6D4', cb: '#0F172A' }
   ],
   3: [
-    { label: '攝影藝術展', badge: '展覽', thumb: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=225&fit=crop',
+    { label: '攝影藝術展', badge: '展覽',
       title: '光影之間', sub: '當代攝影藝術展', desc: '精選 30 位國際攝影師作品，橫跨紀實、人像、風景等多元主題。透過鏡頭，重新發現世界的美。', cta: '免費參觀 →',
-      img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80', cp: '#6B5C4D', cb: '#F7F3EE' },
-    { label: '文學講座', badge: '講座', thumb: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d', cp: '#6B5C4D', cb: '#F7F3EE' },
+    { label: '文學講座', badge: '講座',
       title: '閱讀的力量', sub: '年度文學沙龍系列', desc: '邀請六位當代作家，分享創作歷程與文學觀點。每月一場深度對話，重拾閱讀的感動。', cta: '預約座位 →',
-      img: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80', cp: '#92400E', cb: '#FFFBEB' },
-    { label: '茶道體驗', badge: '文化', thumb: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570', cp: '#92400E', cb: '#FFFBEB' },
+    { label: '茶道體驗', badge: '文化',
       title: '一期一會', sub: '日本茶道體驗課程', desc: '在寧靜的和室空間中，跟隨茶道老師學習泡茶的藝術。感受每一杯茶裡的禪意與美學。', cta: '立即預約 →',
-      img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&q=80', cp: '#6B5C4D', cb: '#F7F3EE' }
+      img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc', cp: '#6B5C4D', cb: '#F7F3EE' }
   ],
   4: [
-    { label: '企業領導力培訓', badge: '企業', thumb: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=225&fit=crop',
+    { label: '企業領導力培訓', badge: '企業',
       title: '卓越領導力\n培訓計畫', sub: '企業內訓專案', desc: '為期三個月的高階主管培訓，結合哈佛商學院方法論與在地實務案例。提升團隊凝聚力與決策品質。', cta: '索取簡章 →',
-      img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80', cp: '#2C3E50', cb: '#F8F9FA' },
-    { label: '數位行銷實務', badge: '培訓', thumb: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1552664730-d307ca884978', cp: '#2C3E50', cb: '#F8F9FA' },
+    { label: '數位行銷實務', badge: '培訓',
       title: '數位行銷\n全攻略', sub: '從策略到執行的完整指南', desc: 'SEO、社群經營、廣告投放一次學會。實際操作 Google Analytics 與 Meta 廣告後台。', cta: '立即諮詢 →',
-      img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80', cp: '#1E40AF', cb: '#F8F9FA' },
-    { label: '財務規劃', badge: '專業', thumb: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f', cp: '#1E40AF', cb: '#F8F9FA' },
+    { label: '財務規劃', badge: '專業',
       title: '企業財務\n健檢計畫', sub: '專業顧問團隊', desc: '針對中小企業量身打造的財務診斷服務，優化現金流管理，制定永續成長策略。', cta: '預約諮詢 →',
-      img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80', cp: '#374151', cb: '#F9FAFB' }
+      img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f', cp: '#374151', cb: '#F9FAFB' }
   ],
   5: [
-    { label: '晨間瑜伽', badge: '生活', thumb: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=225&fit=crop',
+    { label: '晨間瑜伽', badge: '生活',
       size: 'square', title: '晨間瑜伽', sub: '找回身心平衡', desc: '每週二、四早晨 7:00，在城市中心的綠意空間，用一小時的流動瑜伽開啟美好的一天。', cta: '預約體驗 →',
-      img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80', cp: '#E879A8', cb: '#FFF5F5' },
-    { label: '手作甜點課', badge: '手作', thumb: 'https://images.unsplash.com/photo-1486427944544-d2c246c4df14?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b', cp: '#E879A8', cb: '#FFF5F5' },
+    { label: '手作甜點課', badge: '手作',
       size: 'square', title: '法式甜點\n手作課', sub: '零基礎也能上手', desc: '跟著法國藍帶主廚學做馬卡龍、千層派。小班制教學，材料工具全包，成品帶回家。', cta: '報名去 →',
-      img: 'https://images.unsplash.com/photo-1486427944544-d2c246c4df14?w=800&q=80', cp: '#F59E0B', cb: '#FFFBEB' },
-    { label: '花藝課程', badge: '美學', thumb: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1486427944544-d2c246c4df14', cp: '#F59E0B', cb: '#FFFBEB' },
+    { label: '花藝課程', badge: '美學',
       size: 'square', title: '花與日常', sub: '療癒系花藝課程', desc: '學習韓式花藝插花技巧，用鮮花為生活增添色彩。每堂課帶走一束獨一無二的作品。', cta: '預約席位 →',
-      img: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&q=80', cp: '#A855F7', cb: '#FAF5FF' }
+      img: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d', cp: '#A855F7', cb: '#FAF5FF' }
   ],
   6: [
-    { label: 'CEO 高階研修班', badge: 'VIP', thumb: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=300&h=225&fit=crop',
+    { label: 'CEO 高階研修班', badge: 'VIP',
       title: 'CEO\n高階研修班', sub: '第八屆菁英限定', desc: '僅限 20 位企業決策者參與。三天兩夜的深度學習之旅，涵蓋策略思維、數位轉型與全球佈局。', cta: '申請入學 →',
-      img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80', cp: '#B8860B', cb: '#080808' },
-    { label: '品酒私塾', badge: '限定', thumb: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4', cp: '#B8860B', cb: '#080808' },
+    { label: '品酒私塾', badge: '限定',
       title: '頂級品酒\n私塾課程', sub: '侍酒師親授', desc: '探索法國五大酒莊的風土之旅。每堂品飲 6 款頂級年份酒，由國際認證侍酒師深度導覽。', cta: '限額報名 →',
-      img: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&q=80', cp: '#991B1B', cb: '#0A0A0A' },
-    { label: '私人理財顧問', badge: '菁英', thumb: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=300&h=225&fit=crop',
+      img: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3', cp: '#991B1B', cb: '#0A0A0A' },
+    { label: '私人理財顧問', badge: '菁英',
       title: '菁英財富\n管理計畫', sub: '年度限額招募中', desc: '專屬理財顧問一對一服務，涵蓋資產配置、稅務規劃與傳承策略。高資產人士的首選。', cta: '預約面談 →',
-      img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80', cp: '#B8860B', cb: '#080808' }
+      img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf', cp: '#B8860B', cb: '#080808' }
   ]
 };
 
@@ -1457,24 +1576,34 @@ const TPL_EXAMPLES = {
 function renderInspirationPanel() {
   const panel = $('inspPanel');
   const examples = TPL_EXAMPLES[S.tpl] || [];
+  const wasCollapsed = panel.classList.contains('collapsed');
 
   panel.innerHTML = `
-    <div class="insp-header">
+    <div class="insp-header" onclick="toggleInspPanel()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       <span class="insp-header-text">範例靈感</span>
       <span class="insp-header-hint">· 點擊套用</span>
+      <svg class="insp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    ${examples.map((ex, i) => `
-      <div class="insp-card" onclick="applyExample(${i})">
-        <img class="insp-card-img" src="${ex.thumb}" alt="${ex.label}" loading="lazy">
-        <span class="insp-card-badge">${ex.badge}</span>
-        <div class="insp-card-body">
-          <div class="insp-card-label">${ex.label}</div>
+    <div class="insp-body">
+      ${examples.map((ex, i) => `
+        <div class="insp-card" onclick="applyExample(${i})">
+          <img class="insp-card-img" src="${unsplashSized(ex.img, 300, 225)}" alt="${ex.label}" loading="lazy">
+          <span class="insp-card-badge">${ex.badge}</span>
+          <div class="insp-card-body">
+            <div class="insp-card-label">${ex.label}</div>
+          </div>
         </div>
-      </div>
-    `).join('')}
+      `).join('')}
+    </div>
   `;
+
+  if (wasCollapsed) panel.classList.add('collapsed');
 }
+
+window.toggleInspPanel = function() {
+  $('inspPanel').classList.toggle('collapsed');
+};
 
 /* ═══ APPLY EXAMPLE ═══ */
 window.applyExample = function(idx) {
