@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DM Studio — 宣傳設計工坊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+TC:wght@400;500;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM — Editorial Refined
+   Inspired by Notion / Linear / premium print
+   ═══════════════════════════════════════════ */
+:root {
+  /* Warm neutral palette — not cold gray */
+  --stone-50: #FAFAF9;
+  --stone-100: #F5F5F4;
+  --stone-200: #E7E5E4;
+  --stone-300: #D6D3D1;
+  --stone-400: #A8A29E;
+  --stone-500: #78716C;
+  --stone-600: #57534E;
+  --stone-700: #44403C;
+  --stone-800: #292524;
+  --stone-900: #1C1917;
+  --stone-950: #0C0A09;
+
+  --accent: #E16A3D;
+  --accent-soft: #FBF0EB;
+  --accent-hover: #C9572F;
+
+  --ink: var(--stone-900);
+  --ink-secondary: var(--stone-500);
+  --ink-muted: var(--stone-400);
+  --surface: #FFFFFF;
+  --surface-raised: var(--stone-50);
+  --surface-sunken: var(--stone-100);
+
+  --border-subtle: rgba(0,0,0,0.06);
+  --border-default: rgba(0,0,0,0.1);
+  --border-strong: rgba(0,0,0,0.15);
+
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 14px;
+  --radius-xl: 20px;
+
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-s: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-m: 0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-l: 0 8px 30px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-preview: 0 1px 4px rgba(0,0,0,0.06), 0 12px 40px rgba(0,0,0,0.08);
+
+  --font-display: 'Noto Serif TC', 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', 'Noto Sans TC', system-ui, sans-serif;
+  --font-ui: 'Noto Sans TC', 'DM Sans', system-ui, sans-serif;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ═══ RESET ═══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-ui);
+  background: var(--stone-100);
+  color: var(--ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--stone-300); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--stone-400); }
+
+/* ═══ LAYOUT ═══ */
+.app {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  grid-template-rows: 56px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ═══ TOPBAR ═══ */
+.topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-subtle);
+  z-index: 50;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--ink);
+  border-radius: var(--radius-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topbar-icon svg { width: 16px; height: 16px; color: #fff; }
+
+.topbar-title {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.topbar-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--border-default);
+}
+
+.topbar-subtitle {
+  font-size: 13px;
+  color: var(--ink-secondary);
+  font-weight: 400;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ═══ BUTTONS ═══ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--radius-s);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration) var(--ease-out);
+  border: none;
+  white-space: nowrap;
+}
+
+.btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+.btn-primary {
+  background: var(--ink);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--stone-800); transform: translateY(-0.5px); box-shadow: var(--shadow-s); }
+
+.btn-accent {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-accent:hover { background: var(--accent-hover); transform: translateY(-0.5px); box-shadow: var(--shadow-s); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-secondary);
+  border: 1px solid var(--border-default);
+}
+.btn-ghost:hover { background: var(--surface-raised); color: var(--ink); border-color: var(--border-strong); }
+
+.btn-subtle {
+  background: transparent;
+  color: var(--ink-secondary);
+}
+.btn-subtle:hover { background: var(--surface-sunken); color: var(--ink); }
+
+/* ═══ SIDEBAR ═══ */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-inner {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ═══ COLLAPSIBLE SECTIONS ═══ */
+.section {
+  border-radius: var(--radius-m);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px;
+  cursor: pointer;
+  border-radius: var(--radius-s);
+  transition: background var(--duration);
+  user-select: none;
+}
+
+.section-header:hover { background: var(--surface-raised); }
+
+.section-header svg {
+  width: 15px;
+  height: 15px;
+  color: var(--ink-muted);
+  flex-shrink: 0;
+}
+
+.section-header .chevron {
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  color: var(--ink-muted);
+  transition: transform var(--duration) var(--ease-out);
+}
+
+.section.collapsed .chevron { transform: rotate(-90deg); }
+.section.collapsed .section-body { display: none; }
+
+.section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.section-body {
+  padding: 4px 0 12px;
+}
+
+/* ═══ TEMPLATE GRID ═══ */
+.tpl-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.tpl-card {
+  position: relative;
+  aspect-ratio: 3/4;
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all var(--duration) var(--ease-out);
+  outline: none;
+}
+
+.tpl-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-m); }
+
+.tpl-card.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft), var(--shadow-m);
+}
+
+.tpl-card .tpl-preview {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tpl-card .tpl-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 8px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+
+/* Mini template previews */
+.tpl-mini-1 { background: #fff; }
+.tpl-mini-1 .tpl-preview { padding: 12%; }
+.tpl-mini-1 .tpl-preview::before { content: ''; display: block; width: 100%; height: 45%; background: linear-gradient(135deg, #f0ebe3, #e8e0d4); border-radius: 4px; margin-bottom: 8%; }
+.tpl-mini-1 .tpl-preview::after { content: ''; display: block; width: 60%; height: 3px; background: var(--stone-800); border-radius: 2px; }
+.tpl-mini-1 .tpl-label { background: linear-gradient(transparent, rgba(255,255,255,0.95)); color: var(--ink); }
+
+.tpl-mini-2 { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); }
+.tpl-mini-2 .tpl-preview { padding: 12%; justify-content: flex-end; }
+.tpl-mini-2 .tpl-preview::before { content: ''; display: block; width: 50%; height: 3px; background: #e94560; border-radius: 2px; margin-bottom: 6px; }
+.tpl-mini-2 .tpl-preview::after { content: ''; display: block; width: 80%; height: 2px; background: rgba(255,255,255,0.3); border-radius: 2px; }
+.tpl-mini-2 .tpl-label { background: linear-gradient(transparent, rgba(26,26,46,0.95)); color: rgba(255,255,255,0.9); }
+
+.tpl-mini-3 { background: #F7F3EE; }
+.tpl-mini-3 .tpl-preview { padding: 10%; align-items: center; justify-content: center; }
+.tpl-mini-3 .tpl-preview::before { content: ''; width: 70%; height: 1px; background: var(--stone-300); }
+.tpl-mini-3 .tpl-preview::after { content: ''; width: 40%; height: 1px; background: var(--stone-300); margin-top: 20%; }
+.tpl-mini-3 .tpl-label { background: linear-gradient(transparent, rgba(247,243,238,0.95)); color: var(--stone-700); }
+
+.tpl-mini-4 { background: linear-gradient(160deg, #2C3E50, #34495E); }
+.tpl-mini-4 .tpl-preview { display: grid; grid-template-columns: 1fr 1fr; }
+.tpl-mini-4 .tpl-preview::before { content: ''; background: rgba(255,255,255,0.06); }
+.tpl-mini-4 .tpl-preview::after { content: ''; }
+.tpl-mini-4 .tpl-label { background: linear-gradient(transparent, rgba(44,62,80,0.95)); color: rgba(255,255,255,0.9); }
+
+.tpl-mini-5 { background: linear-gradient(135deg, #FFF5F5, #FFF0E5, #F5F0FF); }
+.tpl-mini-5 .tpl-preview { padding: 15%; align-items: center; justify-content: center; }
+.tpl-mini-5 .tpl-preview::before { content: ''; width: 70%; height: 60%; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.tpl-mini-5 .tpl-label { background: linear-gradient(transparent, rgba(255,245,245,0.95)); color: var(--stone-700); }
+
+.tpl-mini-6 { background: #0A0A0A; }
+.tpl-mini-6 .tpl-preview { padding: 12%; align-items: center; justify-content: center; position: relative; }
+.tpl-mini-6 .tpl-preview::before { content: ''; width: 60%; height: 1px; background: linear-gradient(90deg, transparent, #B8860B, transparent); }
+.tpl-mini-6 .tpl-preview::after { content: ''; position: absolute; inset: 10%; border: 0.5px solid rgba(184,134,11,0.2); }
+.tpl-mini-6 .tpl-label { background: linear-gradient(transparent, rgba(10,10,10,0.95)); color: rgba(184,134,11,0.9); }
+
+/* ═══ SIZE CHIPS ═══ */
+.size-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 4px;
+}
+
+.size-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 100px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: var(--ink-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  transition: all var(--duration) var(--ease-out);
+  white-space: nowrap;
+}
+
+.size-chip:hover { border-color: var(--border-strong); color: var(--ink); }
+
+.size-chip.active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.size-chip .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+/* ═══ FORM ═══ */
+.field {
+  padding: 0 4px;
+  margin-bottom: 10px;
+}
+
+.field:last-child { margin-bottom: 0; }
+
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  margin-bottom: 5px;
+  padding-left: 1px;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 8px 11px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-s);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-family: var(--font-ui);
+  line-height: 1.5;
+  transition: all var(--duration);
+  outline: none;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--ink-muted);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+/* ═══ UPLOAD ═══ */
+.upload-zone {
+  margin: 0 4px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-m);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all var(--duration);
+  position: relative;
+  text-align: center;
+  min-height: 100px;
+}
+
+/* URL input area */
+.url-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 4px;
+  color: var(--ink-muted);
+  font-size: 11px;
+}
+
+.url-divider::before,
+.url-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-default);
+}
+
+.url-input-row {
+  display: flex;
+  gap: 6px;
+  margin: 0 4px;
+}
+
+.url-input-row input {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-s);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 12px;
+  font-family: var(--font-ui);
+  outline: none;
+  transition: all var(--duration);
+  min-width: 0;
+}
+
+.url-input-row input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.url-input-row input::placeholder {
+  color: var(--ink-muted);
+}
+
+.url-input-row .btn-url {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: var(--radius-s);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-default);
+  color: var(--ink-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  transition: all var(--duration);
+  white-space: nowrap;
+  gap: 4px;
+}
+
+.url-input-row .btn-url:hover {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.url-input-row .btn-url svg {
+  width: 14px;
+  height: 14px;
+}
+
+.url-input-row .btn-url.loading-url {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.url-error {
+  margin: 4px 4px 0;
+  font-size: 11px;
+  color: #dc2626;
+  display: none;
+}
+
+.url-error.show { display: block; }
+
+/* ═══ INSPIRATION PANEL (RIGHT SIDE) ═══ */
+.inspiration-panel {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  overflow-x: visible;
+}
+
+.inspiration-panel::-webkit-scrollbar { width: 0; }
+
+.insp-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 100px;
+  box-shadow: var(--shadow-s);
+  width: fit-content;
+}
+
+.insp-header svg { width: 13px; height: 13px; color: var(--accent); flex-shrink: 0; }
+
+.insp-header-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.insp-header-hint {
+  font-size: 10px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.insp-card {
+  width: 152px;
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  cursor: pointer;
+  border: 1.5px solid var(--border-subtle);
+  transition: all var(--duration) var(--ease-out);
+  background: var(--surface);
+  box-shadow: var(--shadow-s);
+  position: relative;
+}
+
+.insp-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-l);
+  border-color: var(--accent);
+}
+
+.insp-card-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  background: var(--stone-200);
+}
+
+.insp-card-body {
+  padding: 8px 10px 9px;
+}
+
+.insp-card-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 1px;
+  line-height: 1.3;
+}
+
+.insp-card-desc {
+  font-size: 10px;
+  color: var(--ink-muted);
+  line-height: 1.35;
+}
+
+.insp-card-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 2px 7px;
+  border-radius: 100px;
+  font-size: 9px;
+  font-weight: 600;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+
+/* Hide on small screens */
+@media (max-width: 1100px) {
+  .inspiration-panel { display: none; }
+}
+
+.upload-zone:hover,
+.upload-zone.dragover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.upload-zone.has-image {
+  padding: 8px;
+  border-style: solid;
+  border-color: var(--border-default);
+}
+
+.upload-zone svg { width: 24px; height: 24px; color: var(--ink-muted); }
+.upload-zone .upload-text { font-size: 13px; color: var(--ink-secondary); font-weight: 500; }
+.upload-zone .upload-hint { font-size: 11px; color: var(--ink-muted); }
+.upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+.upload-thumb {
+  max-width: 100%;
+  max-height: 120px;
+  border-radius: var(--radius-s);
+  object-fit: contain;
+}
+
+.upload-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--stone-800);
+  border: none;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--duration);
+}
+
+.upload-zone:hover .upload-remove { opacity: 1; }
+
+/* ═══ COLOR PICKERS ═══ */
+.color-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.color-item label {
+  font-size: 11px;
+  color: var(--ink-muted);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.color-swatch-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-s);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.color-swatch-wrap input[type="color"] {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+}
+
+.color-swatch-wrap input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.color-swatch-wrap input[type="color"]::-webkit-color-swatch { border: none; border-radius: 3px; }
+
+.color-hex {
+  font-size: 11px;
+  font-family: 'DM Sans', monospace;
+  color: var(--ink-secondary);
+  letter-spacing: 0.02em;
+}
+
+/* ═══ SIDEBAR FOOTER ═══ */
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--surface);
+  position: sticky;
+  bottom: 0;
+}
+
+.sidebar-footer .btn { width: 100%; height: 40px; font-size: 13px; font-weight: 600; }
+
+/* ═══ PREVIEW AREA ═══ */
+.preview-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  overflow: auto;
+  position: relative;
+  /* Subtle dot pattern */
+  background-color: var(--stone-100);
+  background-image: radial-gradient(circle, var(--stone-300) 0.5px, transparent 0.5px);
+  background-size: 20px 20px;
+}
+
+.preview-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 100px;
+  font-size: 11px;
+  color: var(--ink-secondary);
+  box-shadow: var(--shadow-xs);
+}
+
+.preview-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+.preview-wrap {
+  box-shadow: var(--shadow-preview);
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: width 400ms var(--ease-out), height 400ms var(--ease-out);
+}
+
+/* ═══ DM CANVAS ═══ */
+.dm {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── SVG placeholder icon ── */
+.ph-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ph-icon svg { color: rgba(0,0,0,0.12); }
+
+/* ────────────────────────────────
+   TEMPLATE 1 — 現代簡約 / Modern Minimal
+   Clean white, bold typography, accent bar
+   ──────────────────────────────── */
+.dm[data-t="1"] { background: #fff; display: flex; flex-direction: column; }
+.dm[data-t="1"] .dm-img { height: 42%; overflow: hidden; background: #F0EBE3; }
+.dm[data-t="1"] .dm-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dm[data-t="1"] .dm-body { flex: 1; padding: 7% 8%; display: flex; flex-direction: column; justify-content: center; }
+.dm[data-t="1"] .dm-bar { width: 36px; height: 3px; border-radius: 2px; margin-bottom: 5%; }
+.dm[data-t="1"] .dm-h1 { font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: clamp(1.1rem, 4.2vw, 2.6rem); line-height: 1.25; color: var(--stone-900); margin-bottom: 3%; letter-spacing: -0.02em; }
+.dm[data-t="1"] .dm-h2 { font-family: 'Noto Sans TC', sans-serif; font-size: clamp(0.6rem, 1.6vw, 0.95rem); color: var(--stone-500); font-weight: 500; margin-bottom: 3%; letter-spacing: 0.02em; }
+.dm[data-t="1"] .dm-p { font-family: 'Noto Sans TC', sans-serif; font-size: clamp(0.55rem, 1.3vw, 0.82rem); color: var(--stone-400); line-height: 1.75; margin-bottom: 6%; }
+.dm[data-t="1"] .dm-cta { display: inline-flex; align-items: center; padding: 2.5% 5.5%; border-radius: 100px; color: #fff; font-family: 'Noto Sans TC', sans-serif; font-weight: 600; font-size: clamp(0.55rem, 1.3vw, 0.85rem); align-self: flex-start; letter-spacing: 0.02em; }
+
+/* ────────────────────────────────
+   TEMPLATE 2 — 暗夜霓虹 / Dark Neon
+   Deep navy gradient with vivid accent
+   ──────────────────────────────── */
+.dm[data-t="2"] { display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; }
+.dm[data-t="2"] .dm-bg-circle { position: absolute; width: 60%; height: 60%; border-radius: 50%; filter: blur(60px); opacity: 0.15; pointer-events: none; }
+.dm[data-t="2"] .dm-bg-circle:nth-child(1) { top: -10%; right: -10%; }
+.dm[data-t="2"] .dm-bg-circle:nth-child(2) { bottom: 10%; left: -15%; opacity: 0.08; }
+.dm[data-t="2"] .dm-img { position: absolute; top: 7%; right: 7%; width: 32%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; border: 3px solid rgba(255,255,255,0.1); z-index: 2; }
+.dm[data-t="2"] .dm-img img { width: 100%; height: 100%; object-fit: cover; }
+.dm[data-t="2"] .dm-body { position: relative; z-index: 3; padding: 8% 8% 10%; }
+.dm[data-t="2"] .dm-tag { display: inline-block; padding: 1% 3%; border-radius: 100px; font-size: clamp(0.45rem, 1.1vw, 0.7rem); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3%; color: #fff; }
+.dm[data-t="2"] .dm-h1 { font-family: 'Fraunces', 'Noto Serif TC', serif; font-weight: 900; font-size: clamp(1.3rem, 5vw, 3rem); line-height: 1.1; color: #fff; margin-bottom: 3%; }
+.dm[data-t="2"] .dm-p { font-family: 'DM Sans', sans-serif; font-size: clamp(0.5rem, 1.2vw, 0.8rem); color: rgba(255,255,255,0.55); line-height: 1.65; margin-bottom: 5%; max-width: 65%; }
+.dm[data-t="2"] .dm-cta { display: inline-flex; padding: 2.5% 5%; background: #fff; border-radius: 100px; font-weight: 700; font-size: clamp(0.55rem, 1.3vw, 0.85rem); align-self: flex-start; letter-spacing: 0.01em; }
+
+/* ────────────────────────────────
+   TEMPLATE 3 — 書院風雅 / Editorial Elegant
+   Centered, serif-heavy, minimal ornamentation
+   ──────────────────────────────── */
+.dm[data-t="3"] { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 10%; }
+.dm[data-t="3"] .dm-rule { width: 40px; height: 1px; margin-bottom: 5%; }
+.dm[data-t="3"] .dm-h2 { font-family: 'DM Sans', 'Noto Sans TC', sans-serif; font-size: clamp(0.5rem, 1.2vw, 0.75rem); text-transform: uppercase; letter-spacing: 0.2em; font-weight: 500; margin-bottom: 4%; opacity: 0.5; }
+.dm[data-t="3"] .dm-h1 { font-family: 'Cormorant Garamond', 'Noto Serif TC', serif; font-weight: 700; font-size: clamp(1.4rem, 5vw, 3.2rem); line-height: 1.15; margin-bottom: 5%; letter-spacing: -0.02em; }
+.dm[data-t="3"] .dm-img { width: 55%; aspect-ratio: 16/10; overflow: hidden; border-radius: var(--radius-s); margin-bottom: 5%; }
+.dm[data-t="3"] .dm-img img { width: 100%; height: 100%; object-fit: cover; }
+.dm[data-t="3"] .dm-p { font-family: 'DM Sans', 'Noto Sans TC', sans-serif; font-size: clamp(0.5rem, 1.2vw, 0.78rem); line-height: 1.7; opacity: 0.5; max-width: 75%; margin: 0 auto 5%; }
+.dm[data-t="3"] .dm-cta { display: inline-flex; padding: 2% 5%; border: 1.5px solid; font-weight: 600; font-size: clamp(0.5rem, 1.1vw, 0.75rem); text-transform: uppercase; letter-spacing: 0.12em; }
+.dm[data-t="3"] .dm-rule-bottom { width: 40px; height: 1px; margin-top: 5%; }
+
+/* ────────────────────────────────
+   TEMPLATE 4 — 商務雙欄 / Corporate Split
+   Professional two-column layout
+   ──────────────────────────────── */
+.dm[data-t="4"] { display: grid; grid-template-columns: 1fr 1fr; height: 100%; }
+.dm[data-t="4"] .dm-img { overflow: hidden; position: relative; }
+.dm[data-t="4"] .dm-img img { width: 100%; height: 100%; object-fit: cover; }
+.dm[data-t="4"] .dm-img .ph-icon { width: 100%; height: 100%; }
+.dm[data-t="4"] .dm-body { padding: 10%; display: flex; flex-direction: column; justify-content: center; }
+.dm[data-t="4"] .dm-h2 { font-family: 'DM Sans', sans-serif; font-size: clamp(0.45rem, 1vw, 0.7rem); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 4%; opacity: 0.4; }
+.dm[data-t="4"] .dm-h1 { font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: clamp(1rem, 3.2vw, 2rem); line-height: 1.3; margin-bottom: 4%; letter-spacing: -0.01em; }
+.dm[data-t="4"] .dm-divider { width: 30px; height: 2px; margin-bottom: 4%; }
+.dm[data-t="4"] .dm-p { font-family: 'DM Sans', 'Noto Sans TC', sans-serif; font-size: clamp(0.5rem, 1.1vw, 0.75rem); line-height: 1.7; opacity: 0.5; margin-bottom: 6%; }
+.dm[data-t="4"] .dm-cta { display: inline-flex; padding: 2.5% 5%; border-radius: 4px; color: #fff; font-weight: 600; font-size: clamp(0.5rem, 1.1vw, 0.75rem); align-self: flex-start; letter-spacing: 0.03em; }
+
+/* ────────────────────────────────
+   TEMPLATE 5 — 柔彩卡片 / Soft Card
+   Pastel bg, floating card, rounded, playful
+   ──────────────────────────────── */
+.dm[data-t="5"] { display: flex; align-items: center; justify-content: center; padding: 8%; overflow: hidden; position: relative; }
+.dm[data-t="5"] .dm-blob1, .dm[data-t="5"] .dm-blob2 { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; pointer-events: none; }
+.dm[data-t="5"] .dm-blob1 { width: 50%; height: 50%; top: -10%; left: -10%; }
+.dm[data-t="5"] .dm-blob2 { width: 40%; height: 40%; bottom: -10%; right: -10%; }
+.dm[data-t="5"] .dm-card { background: #fff; border-radius: 20px; padding: 8%; width: 88%; box-shadow: 0 20px 60px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 2; }
+.dm[data-t="5"] .dm-img { width: 55%; aspect-ratio: 1; border-radius: 16px; overflow: hidden; margin-bottom: 5%; }
+.dm[data-t="5"] .dm-img img { width: 100%; height: 100%; object-fit: cover; }
+.dm[data-t="5"] .dm-h1 { font-family: 'Noto Sans TC', sans-serif; font-weight: 700; font-size: clamp(1rem, 3.2vw, 2rem); line-height: 1.25; color: var(--stone-800); margin-bottom: 2%; }
+.dm[data-t="5"] .dm-h2 { font-size: clamp(0.55rem, 1.3vw, 0.85rem); color: var(--stone-400); font-weight: 400; margin-bottom: 3%; }
+.dm[data-t="5"] .dm-p { font-size: clamp(0.5rem, 1.1vw, 0.75rem); color: var(--stone-400); line-height: 1.7; margin-bottom: 5%; max-width: 90%; }
+.dm[data-t="5"] .dm-cta { padding: 2.5% 6%; border-radius: 100px; color: #fff; font-weight: 600; font-size: clamp(0.55rem, 1.2vw, 0.82rem); }
+
+/* ────────────────────────────────
+   TEMPLATE 6 — 奢華暗金 / Luxury Dark
+   Black + gold, editorial luxury
+   ──────────────────────────────── */
+.dm[data-t="6"] { background: #080808; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 10%; position: relative; overflow: hidden; }
+.dm[data-t="6"]::before { content: ''; position: absolute; inset: 6%; border: 0.5px solid rgba(184,134,11,0.15); pointer-events: none; }
+.dm[data-t="6"] .dm-line-top, .dm[data-t="6"] .dm-line-bot { position: absolute; left: 12%; right: 12%; height: 0.5px; }
+.dm[data-t="6"] .dm-line-top { top: 8%; }
+.dm[data-t="6"] .dm-line-bot { bottom: 8%; }
+.dm[data-t="6"] .dm-img { width: 38%; aspect-ratio: 3/4; overflow: hidden; margin-bottom: 6%; position: relative; z-index: 2; }
+.dm[data-t="6"] .dm-img img { width: 100%; height: 100%; object-fit: cover; }
+.dm[data-t="6"] .dm-h2 { font-family: 'DM Sans', sans-serif; font-size: clamp(0.45rem, 1vw, 0.68rem); text-transform: uppercase; letter-spacing: 0.3em; margin-bottom: 3%; position: relative; z-index: 2; }
+.dm[data-t="6"] .dm-h1 { font-family: 'Cormorant Garamond', 'Noto Serif TC', serif; font-weight: 700; font-size: clamp(1.3rem, 4.5vw, 2.8rem); line-height: 1.15; color: #F5F0E8; margin-bottom: 3%; position: relative; z-index: 2; letter-spacing: 0.02em; }
+.dm[data-t="6"] .dm-p { font-family: 'DM Sans', sans-serif; font-size: clamp(0.45rem, 1vw, 0.72rem); color: rgba(245,240,232,0.35); line-height: 1.8; max-width: 75%; margin-bottom: 5%; position: relative; z-index: 2; }
+.dm[data-t="6"] .dm-cta { display: inline-flex; padding: 2% 5%; border: 1px solid; font-weight: 500; font-size: clamp(0.45rem, 1vw, 0.7rem); text-transform: uppercase; letter-spacing: 0.2em; position: relative; z-index: 2; }
+
+/* ═══ EXPORT LOADING ═══ */
+.btn.loading { pointer-events: none; opacity: 0.6; }
+.btn.loading::after { content: ''; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; margin-left: 6px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 860px) {
+  .app { grid-template-columns: 1fr; grid-template-rows: 56px auto 1fr; }
+  .sidebar { border-right: none; border-bottom: 1px solid var(--border-subtle); max-height: 50vh; }
+  .preview-area { padding: 24px; }
+  .tpl-grid { grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 4h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M4 14h6v6H4z"/><path d="M17 14v6"/><path d="M14 17h6"/></svg>
+      </div>
+      <span class="topbar-title">DM Studio</span>
+      <span class="topbar-sep"></span>
+      <span class="topbar-subtitle">宣傳設計工坊</span>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-subtle" onclick="resetAll()" aria-label="重置">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        重新開始
+      </button>
+      <button class="btn btn-primary" id="btnExport" onclick="exportPNG()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        匯出 PNG
+      </button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!-- Templates -->
+      <div class="section" id="secTemplate">
+        <div class="section-header" onclick="toggleSection('secTemplate')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span class="section-title">模板風格</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="tpl-grid">
+            <div class="tpl-card tpl-mini-1 active" data-tpl="1" onclick="selectTemplate(1)" tabindex="0" role="button" aria-label="現代簡約"><div class="tpl-preview"></div><div class="tpl-label">現代簡約</div></div>
+            <div class="tpl-card tpl-mini-2" data-tpl="2" onclick="selectTemplate(2)" tabindex="0" role="button" aria-label="暗夜霓虹"><div class="tpl-preview"></div><div class="tpl-label">暗夜霓虹</div></div>
+            <div class="tpl-card tpl-mini-3" data-tpl="3" onclick="selectTemplate(3)" tabindex="0" role="button" aria-label="書院風雅"><div class="tpl-preview"></div><div class="tpl-label">書院風雅</div></div>
+            <div class="tpl-card tpl-mini-4" data-tpl="4" onclick="selectTemplate(4)" tabindex="0" role="button" aria-label="商務雙欄"><div class="tpl-preview"></div><div class="tpl-label">商務雙欄</div></div>
+            <div class="tpl-card tpl-mini-5" data-tpl="5" onclick="selectTemplate(5)" tabindex="0" role="button" aria-label="柔彩卡片"><div class="tpl-preview"></div><div class="tpl-label">柔彩卡片</div></div>
+            <div class="tpl-card tpl-mini-6" data-tpl="6" onclick="selectTemplate(6)" tabindex="0" role="button" aria-label="奢華暗金"><div class="tpl-preview"></div><div class="tpl-label">奢華暗金</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Size -->
+      <div class="section" id="secSize">
+        <div class="section-header" onclick="toggleSection('secSize')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 3v18"/></svg>
+          <span class="section-title">輸出尺寸</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="size-row">
+            <button class="size-chip active" data-size="a4" onclick="selectSize('a4')"><span class="dot"></span>A4 直式</button>
+            <button class="size-chip" data-size="square" onclick="selectSize('square')"><span class="dot"></span>1080×1080</button>
+            <button class="size-chip" data-size="banner" onclick="selectSize('banner')"><span class="dot"></span>社群橫幅</button>
+            <button class="size-chip" data-size="wide" onclick="selectSize('wide')"><span class="dot"></span>16:9 寬幅</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="section" id="secText">
+        <div class="section-header" onclick="toggleSection('secText')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
+          <span class="section-title">文字內容</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="field"><label for="inpTitle">主標題</label><input type="text" id="inpTitle" placeholder="輸入主標題..." value="探索無限可能"></div>
+          <div class="field"><label for="inpSub">副標題</label><input type="text" id="inpSub" placeholder="輸入副標題..." value="2026 春季精選課程"></div>
+          <div class="field"><label for="inpDesc">說明文字</label><textarea id="inpDesc" placeholder="輸入說明文字...">全新課程陣容，涵蓋 AI、設計、程式開發等熱門領域。由業界專家親自授課，實戰導向的學習體驗。</textarea></div>
+          <div class="field"><label for="inpCta">行動按鈕</label><input type="text" id="inpCta" placeholder="例：立即報名" value="立即報名 →"></div>
+        </div>
+      </div>
+
+      <!-- Image -->
+      <div class="section" id="secImage">
+        <div class="section-header" onclick="toggleSection('secImage')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <span class="section-title">圖片</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="upload-zone" id="uploadZone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <div class="upload-text">拖放圖片或點擊上傳</div>
+            <div class="upload-hint">支援 JPG、PNG、WebP</div>
+            <input type="file" id="fileInput" accept="image/*" aria-label="選擇圖片">
+          </div>
+          <div class="url-divider">或貼上圖片網址</div>
+          <div class="url-input-row">
+            <input type="text" id="inpUrl" placeholder="https://images.unsplash.com/..." aria-label="圖片網址">
+            <button class="btn-url" id="btnUrl" onclick="loadUrl()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              載入
+            </button>
+          </div>
+          <div class="url-error" id="urlError">無法載入此圖片，請確認網址正確且允許跨域存取</div>
+        </div>
+      </div>
+
+      <!-- Colors -->
+      <div class="section" id="secColor">
+        <div class="section-header" onclick="toggleSection('secColor')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="15.5" r="2.5"/><circle cx="8.5" cy="15.5" r="2.5"/></svg>
+          <span class="section-title">色彩</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="color-group">
+            <div class="color-item">
+              <label>主色調</label>
+              <div class="color-swatch-wrap">
+                <input type="color" id="cPrimary" value="#1C1917">
+                <span class="color-hex" id="cPrimaryHex">#1C1917</span>
+              </div>
+            </div>
+            <div class="color-item">
+              <label>背景色</label>
+              <div class="color-swatch-wrap">
+                <input type="color" id="cBg" value="#FFFFFF">
+                <span class="color-hex" id="cBgHex">#FFFFFF</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- PREVIEW -->
+  <main class="preview-area">
+    <div class="preview-badge"><span class="dot"></span><span id="sizeLabel">A4 直式 · 210 × 297 mm</span></div>
+
+    <!-- Inspiration panel (right side, per-template examples) -->
+    <div class="inspiration-panel" id="inspPanel"></div>
+
+    <div class="preview-wrap" id="previewWrap">
+      <div class="dm" id="dm" data-t="1"></div>
+    </div>
+  </main>
+
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ═══ STATE ═══ */
+const S = {
+  tpl: 1,
+  size: 'a4',
+  title: '探索無限可能',
+  sub: '2026 春季精選課程',
+  desc: '全新課程陣容，涵蓋 AI、設計、程式開發等熱門領域。由業界專家親自授課，實戰導向的學習體驗。',
+  cta: '立即報名 →',
+  img: null,
+  cp: '#1C1917',
+  cb: '#FFFFFF'
+};
+
+const SIZES = {
+  a4:     { w: 595, h: 842, label: 'A4 直式 · 210 × 297 mm', ew: 2480, eh: 3508 },
+  square: { w: 540, h: 540, label: '社群正方 · 1080 × 1080 px', ew: 1080, eh: 1080 },
+  banner: { w: 600, h: 314, label: '社群橫幅 · 1200 × 628 px', ew: 1200, eh: 628 },
+  wide:   { w: 640, h: 360, label: '16:9 寬幅 · 1920 × 1080 px', ew: 1920, eh: 1080 }
+};
+
+const TPL_DEFAULTS = {
+  1: { cp: '#1C1917', cb: '#FFFFFF' },
+  2: { cp: '#E94560', cb: '#1A1A2E' },
+  3: { cp: '#6B5C4D', cb: '#F7F3EE' },
+  4: { cp: '#2C3E50', cb: '#F8F9FA' },
+  5: { cp: '#E879A8', cb: '#FFF5F5' },
+  6: { cp: '#B8860B', cb: '#080808' }
+};
+
+const $ = id => document.getElementById(id);
+const dm = $('dm');
+const wrap = $('previewWrap');
+
+const phSvg = `<div class="ph-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`;
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+/* ═══ COLOR HELPERS ═══ */
+function hexRgb(h) { return { r: parseInt(h.slice(1,3),16), g: parseInt(h.slice(3,5),16), b: parseInt(h.slice(5,7),16) }; }
+function rgbHex(r,g,b) { return '#'+[r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join(''); }
+function lighten(h,a) { const c=hexRgb(h); return rgbHex(c.r+(255-c.r)*a, c.g+(255-c.g)*a, c.b+(255-c.b)*a); }
+function darken(h,a) { const c=hexRgb(h); return rgbHex(c.r*(1-a), c.g*(1-a), c.b*(1-a)); }
+function isDark(h) { const c=hexRgb(h); return (c.r*299+c.g*587+c.b*114)/1000 < 128; }
+function alpha(h,a) { const c=hexRgb(h); return `rgba(${c.r},${c.g},${c.b},${a})`; }
+function shiftHue(hex, deg) {
+  let {r,g,b}=hexRgb(hex); r/=255; g/=255; b/=255;
+  const mx=Math.max(r,g,b), mn=Math.min(r,g,b);
+  let h,s,l=(mx+mn)/2;
+  if(mx===mn){h=s=0;}else{const d=mx-mn;s=l>0.5?d/(2-mx-mn):d/(mx+mn);if(mx===r)h=((g-b)/d+(g<b?6:0))/6;else if(mx===g)h=((b-r)/d+2)/6;else h=((r-g)/d+4)/6;}
+  h=((h*360+deg)%360)/360;
+  function h2r(p,q,t){if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p;}
+  if(s===0){r=g=b=l;}else{const q=l<0.5?l*(1+s):l+s-l*s,p=2*l-q;r=h2r(p,q,h+1/3);g=h2r(p,q,h);b=h2r(p,q,h-1/3);}
+  return rgbHex(r*255,g*255,b*255);
+}
+
+/* ═══ RENDER ═══ */
+function render() {
+  const t = S.tpl, c = S.cp, bg = S.cb;
+  const imgTag = S.img ? `<img src="${S.img}" alt="圖片">` : phSvg;
+  const bgDark = isDark(bg);
+  const textCol = bgDark ? '#F1F0EE' : '#1C1917';
+  const textMuted = bgDark ? 'rgba(241,240,238,0.45)' : 'rgba(28,25,23,0.45)';
+
+  dm.setAttribute('data-t', t);
+  let html = '';
+
+  switch(t) {
+    case 1:
+      html = `
+        <div class="dm-img">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%;background:#F0EBE3"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+        <div class="dm-body">
+          <div class="dm-bar" style="background:${c}"></div>
+          <div class="dm-h1">${esc(S.title)}</div>
+          <div class="dm-h2">${esc(S.sub)}</div>
+          <div class="dm-p">${esc(S.desc)}</div>
+          <div class="dm-cta" style="background:${c};color:${isDark(c)?'#fff':'#fff'}">${esc(S.cta)}</div>
+        </div>`;
+      dm.style.background = bg;
+      break;
+
+    case 2:
+      html = `
+        <div class="dm-bg-circle" style="background:${c}"></div>
+        <div class="dm-bg-circle" style="background:${shiftHue(c,60)}"></div>
+        <div class="dm-img">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%;background:rgba(255,255,255,0.08)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+        <div class="dm-body">
+          <div class="dm-tag" style="background:${c}">${esc(S.sub)}</div>
+          <div class="dm-h1">${esc(S.title)}</div>
+          <div class="dm-p">${esc(S.desc)}</div>
+          <div class="dm-cta" style="color:${bg}">${esc(S.cta)}</div>
+        </div>`;
+      dm.style.background = `linear-gradient(160deg, ${bg}, ${darken(bg,0.15)}, ${darken(shiftHue(bg,20),0.1)})`;
+      break;
+
+    case 3:
+      html = `
+        <div class="dm-rule" style="background:${c}"></div>
+        <div class="dm-h2" style="color:${textCol}">${esc(S.sub)}</div>
+        <div class="dm-h1" style="color:${textCol}">${esc(S.title)}</div>
+        <div class="dm-img" style="background:${bgDark?'rgba(255,255,255,0.05)':'#F0EBE3'}">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${bgDark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)'}" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+        <div class="dm-p" style="color:${textMuted}">${esc(S.desc)}</div>
+        <div class="dm-cta" style="border-color:${c};color:${c}">${esc(S.cta)}</div>
+        <div class="dm-rule-bottom" style="background:${c}"></div>`;
+      dm.style.background = bg;
+      break;
+
+    case 4: {
+      const bodyBg = bgDark ? bg : '#F8F9FA';
+      html = `
+        <div class="dm-img" style="background:${bgDark?'rgba(255,255,255,0.03)':'#ECEAE7'}">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="${bgDark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.1)'}" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+        <div class="dm-body" style="background:${bodyBg}">
+          <div class="dm-h2" style="color:${textCol}">${esc(S.sub)}</div>
+          <div class="dm-h1" style="color:${textCol}">${esc(S.title)}</div>
+          <div class="dm-divider" style="background:${c}"></div>
+          <div class="dm-p" style="color:${textMuted}">${esc(S.desc)}</div>
+          <div class="dm-cta" style="background:${c}">${esc(S.cta)}</div>
+        </div>`;
+      dm.style.background = bg;
+      break;
+    }
+
+    case 5:
+      html = `
+        <div class="dm-blob1" style="background:${lighten(c,0.5)}"></div>
+        <div class="dm-blob2" style="background:${lighten(shiftHue(c,60),0.5)}"></div>
+        <div class="dm-card">
+          <div class="dm-img" style="background:${lighten(c,0.92)}">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+          <div class="dm-h1">${esc(S.title)}</div>
+          <div class="dm-h2">${esc(S.sub)}</div>
+          <div class="dm-p">${esc(S.desc)}</div>
+          <div class="dm-cta" style="background:${c}">${esc(S.cta)}</div>
+        </div>`;
+      dm.style.background = bg;
+      break;
+
+    case 6:
+      html = `
+        <div class="dm-line-top" style="background:linear-gradient(90deg,transparent,${c},transparent)"></div>
+        <div class="dm-line-bot" style="background:linear-gradient(90deg,transparent,${c},transparent)"></div>
+        <div class="dm-img" style="border:0.5px solid ${alpha(c,0.25)}">${S.img ? `<img src="${S.img}" alt="">` : `<div class="ph-icon" style="width:100%;height:100%;background:${alpha(c,0.04)}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${alpha(c,0.2)}" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`}</div>
+        <div class="dm-h2" style="color:${c}">${esc(S.sub)}</div>
+        <div class="dm-h1">${esc(S.title)}</div>
+        <div class="dm-p">${esc(S.desc)}</div>
+        <div class="dm-cta" style="border-color:${c};color:${c}">${esc(S.cta)}</div>`;
+      dm.style.background = bg;
+      break;
+  }
+
+  dm.innerHTML = html;
+  fitPreview();
+}
+
+function fitPreview() {
+  const s = SIZES[S.size];
+  const area = document.querySelector('.preview-area');
+  const aw = area.clientWidth - 80;
+  const ah = area.clientHeight - 80;
+  const scale = Math.min(aw / s.w, ah / s.h, 1);
+  wrap.style.width = Math.round(s.w * scale) + 'px';
+  wrap.style.height = Math.round(s.h * scale) + 'px';
+  dm.style.width = wrap.style.width;
+  dm.style.height = wrap.style.height;
+  $('sizeLabel').textContent = s.label;
+}
+
+/* ═══ TEMPLATE ═══ */
+window.selectTemplate = function(n) {
+  S.tpl = n;
+  document.querySelectorAll('.tpl-card').forEach(c => c.classList.toggle('active', +c.dataset.tpl === n));
+  const d = TPL_DEFAULTS[n];
+  S.cp = d.cp; S.cb = d.cb;
+  $('cPrimary').value = d.cp; $('cBg').value = d.cb;
+  $('cPrimaryHex').textContent = d.cp; $('cBgHex').textContent = d.cb;
+  render();
+  renderInspirationPanel();
+};
+
+/* ═══ SIZE ═══ */
+window.selectSize = function(s) {
+  S.size = s;
+  document.querySelectorAll('.size-chip').forEach(c => c.classList.toggle('active', c.dataset.size === s));
+  render();
+};
+
+/* ═══ SECTIONS ═══ */
+window.toggleSection = function(id) {
+  $(id).classList.toggle('collapsed');
+};
+
+/* ═══ TEXT INPUTS ═══ */
+function bind(elId, key) { $(elId).addEventListener('input', e => { S[key] = e.target.value; render(); }); }
+bind('inpTitle','title'); bind('inpSub','sub'); bind('inpDesc','desc'); bind('inpCta','cta');
+
+/* ═══ COLORS ═══ */
+$('cPrimary').addEventListener('input', e => { S.cp = e.target.value; $('cPrimaryHex').textContent = e.target.value.toUpperCase(); render(); });
+$('cBg').addEventListener('input', e => { S.cb = e.target.value; $('cBgHex').textContent = e.target.value.toUpperCase(); render(); });
+
+/* ═══ IMAGE ═══ */
+const uz = $('uploadZone'), fi = $('fileInput');
+
+function handleFile(f) {
+  if (!f || !f.type.startsWith('image/')) return;
+  const r = new FileReader();
+  r.onload = e => { S.img = e.target.result; showThumb(); render(); };
+  r.readAsDataURL(f);
+}
+
+function showThumb() {
+  uz.classList.add('has-image');
+  uz.innerHTML = `<img src="${S.img}" class="upload-thumb" alt="預覽"><button class="upload-remove" onclick="removeImg(event)" aria-label="移除">×</button><input type="file" id="fileInput" accept="image/*">`;
+  $('fileInput').addEventListener('change', e => { if(e.target.files[0]) handleFile(e.target.files[0]); });
+}
+
+window.removeImg = function(e) {
+  e.stopPropagation(); S.img = null;
+  uz.classList.remove('has-image');
+  uz.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div class="upload-text">拖放圖片或點擊上傳</div><div class="upload-hint">支援 JPG、PNG、WebP</div><input type="file" id="fileInput" accept="image/*">`;
+  $('fileInput').addEventListener('change', e2 => { if(e2.target.files[0]) handleFile(e2.target.files[0]); });
+  render();
+};
+
+fi.addEventListener('change', e => { if(e.target.files[0]) handleFile(e.target.files[0]); });
+uz.addEventListener('dragover', e => { e.preventDefault(); uz.classList.add('dragover'); });
+uz.addEventListener('dragleave', () => uz.classList.remove('dragover'));
+uz.addEventListener('drop', e => { e.preventDefault(); uz.classList.remove('dragover'); if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+
+/* ═══ URL IMAGE ═══ */
+const urlInput = $('inpUrl');
+const urlErr = $('urlError');
+
+// Enter key triggers load
+urlInput.addEventListener('keydown', e => { if(e.key === 'Enter') { e.preventDefault(); loadUrl(); } });
+
+window.loadUrl = function() {
+  const url = urlInput.value.trim();
+  urlErr.classList.remove('show');
+  if (!url) return;
+
+  const btn = $('btnUrl');
+  btn.classList.add('loading-url');
+  btn.textContent = '載入中...';
+
+  // Use the URL directly — works for Unsplash, Pexels, etc.
+  // Test by creating an Image to verify it loads
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+
+  img.onload = function() {
+    S.img = url;
+    showThumb();
+    render();
+    btn.classList.remove('loading-url');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> 載入`;
+  };
+
+  img.onerror = function() {
+    // If crossOrigin fails, still try using URL directly (it may work for display, just not canvas export)
+    S.img = url;
+    showThumb();
+    render();
+    btn.classList.remove('loading-url');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> 載入`;
+  };
+
+  // Timeout fallback
+  setTimeout(() => {
+    if (!img.complete) {
+      // Still try to use it
+      S.img = url;
+      showThumb();
+      render();
+      btn.classList.remove('loading-url');
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> 載入`;
+    }
+  }, 8000);
+
+  img.src = url;
+};
+
+/* ═══ EXPORT ═══ */
+window.exportPNG = async function() {
+  const btn = $('btnExport');
+  const origHTML = btn.innerHTML;
+  btn.classList.add('loading');
+  btn.textContent = '匯出中';
+  try {
+    const s = SIZES[S.size];
+    const scale = s.ew / dm.offsetWidth;
+    const canvas = await html2canvas(dm, { scale, useCORS: true, allowTaint: true, backgroundColor: null });
+    const a = document.createElement('a');
+    a.download = `DM_${S.size}_${Date.now()}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  } catch(err) { console.error(err); alert('匯出失敗，請重試'); }
+  btn.classList.remove('loading');
+  btn.innerHTML = origHTML;
+};
+
+/* ═══ RESET ═══ */
+window.resetAll = function() {
+  S.tpl=1; S.size='a4'; S.title=''; S.sub=''; S.desc=''; S.cta=''; S.img=null;
+  S.cp='#1C1917'; S.cb='#FFFFFF';
+  $('inpTitle').value=''; $('inpSub').value=''; $('inpDesc').value=''; $('inpCta').value='';
+  $('cPrimary').value='#1C1917'; $('cBg').value='#FFFFFF';
+  $('cPrimaryHex').textContent='#1C1917'; $('cBgHex').textContent='#FFFFFF';
+  document.querySelectorAll('.tpl-card').forEach(c=>c.classList.toggle('active',c.dataset.tpl==='1'));
+  document.querySelectorAll('.size-chip').forEach(c=>c.classList.toggle('active',c.dataset.size==='a4'));
+  if(S.img===null) window.removeImg(new Event('click'));
+  render();
+};
+
+/* ═══ EXAMPLES (per-template) ═══ */
+const TPL_EXAMPLES = {
+  1: [
+    { label: '春季課程招生', badge: '課程', thumb: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=300&h=225&fit=crop',
+      title: '探索無限可能', sub: '2026 春季精選課程', desc: '全新課程陣容，涵蓋 AI、設計、程式開發等熱門領域。由業界專家親自授課，實戰導向的學習體驗。', cta: '立即報名 →',
+      img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80', cp: '#1C1917', cb: '#FFFFFF' },
+    { label: '設計思考工作坊', badge: '工作坊', thumb: 'https://images.unsplash.com/photo-1531498860502-7c67cf02f657?w=300&h=225&fit=crop',
+      title: '設計思考\n實戰工作坊', sub: '從洞察到創新的方法論', desc: '兩天沉浸式體驗，學習 Stanford d.school 設計思考五步驟。帶領你的團隊找到真正的使用者痛點。', cta: '了解更多 →',
+      img: 'https://images.unsplash.com/photo-1531498860502-7c67cf02f657?w=800&q=80', cp: '#2563EB', cb: '#FFFFFF' },
+    { label: '程式語言入門', badge: '線上', thumb: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=300&h=225&fit=crop',
+      title: 'Python\n零基礎入門', sub: '線上直播 · 8 週完整課程', desc: '從零開始學 Python，涵蓋語法基礎、資料分析到自動化腳本。每週作業批改，助教即時解答。', cta: '免費試聽 →',
+      img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=80', cp: '#059669', cb: '#FFFFFF' }
+  ],
+  2: [
+    { label: '科技論壇', badge: '活動', thumb: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=225&fit=crop',
+      title: 'Future\nTech 2026', sub: '年度科技論壇', desc: '集結全球頂尖科技領袖，探討 AI、區塊鏈、量子運算的未來趨勢。三天密集議程，超過 50 場精彩演講。', cta: '搶先報名 →',
+      img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80', cp: '#E94560', cb: '#1A1A2E' },
+    { label: '音樂節', badge: '演出', thumb: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=300&h=225&fit=crop',
+      title: '城市之聲\n音樂節', sub: '2026 夏季限定', desc: '三天兩夜的音樂盛宴，集結 20 組國內外樂團。電子、搖滾、爵士，讓音樂點亮你的夏夜。', cta: '購票去 →',
+      img: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80', cp: '#8B5CF6', cb: '#1E1B4B' },
+    { label: 'AI 黑客松', badge: '競賽', thumb: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=300&h=225&fit=crop',
+      title: 'AI Hack\nDay 2026', sub: '48 小時創意馬拉松', desc: '用 AI 解決真實問題。獎金池超過 50 萬，頂尖業師評審。組隊或個人皆可參加。', cta: '立即報名 →',
+      img: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80', cp: '#06B6D4', cb: '#0F172A' }
+  ],
+  3: [
+    { label: '攝影藝術展', badge: '展覽', thumb: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=225&fit=crop',
+      title: '光影之間', sub: '當代攝影藝術展', desc: '精選 30 位國際攝影師作品，橫跨紀實、人像、風景等多元主題。透過鏡頭，重新發現世界的美。', cta: '免費參觀 →',
+      img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80', cp: '#6B5C4D', cb: '#F7F3EE' },
+    { label: '文學講座', badge: '講座', thumb: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=225&fit=crop',
+      title: '閱讀的力量', sub: '年度文學沙龍系列', desc: '邀請六位當代作家，分享創作歷程與文學觀點。每月一場深度對話，重拾閱讀的感動。', cta: '預約座位 →',
+      img: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80', cp: '#92400E', cb: '#FFFBEB' },
+    { label: '茶道體驗', badge: '文化', thumb: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300&h=225&fit=crop',
+      title: '一期一會', sub: '日本茶道體驗課程', desc: '在寧靜的和室空間中，跟隨茶道老師學習泡茶的藝術。感受每一杯茶裡的禪意與美學。', cta: '立即預約 →',
+      img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&q=80', cp: '#6B5C4D', cb: '#F7F3EE' }
+  ],
+  4: [
+    { label: '企業領導力培訓', badge: '企業', thumb: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=225&fit=crop',
+      title: '卓越領導力\n培訓計畫', sub: '企業內訓專案', desc: '為期三個月的高階主管培訓，結合哈佛商學院方法論與在地實務案例。提升團隊凝聚力與決策品質。', cta: '索取簡章 →',
+      img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80', cp: '#2C3E50', cb: '#F8F9FA' },
+    { label: '數位行銷實務', badge: '培訓', thumb: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=225&fit=crop',
+      title: '數位行銷\n全攻略', sub: '從策略到執行的完整指南', desc: 'SEO、社群經營、廣告投放一次學會。實際操作 Google Analytics 與 Meta 廣告後台。', cta: '立即諮詢 →',
+      img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80', cp: '#1E40AF', cb: '#F8F9FA' },
+    { label: '財務規劃', badge: '專業', thumb: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=300&h=225&fit=crop',
+      title: '企業財務\n健檢計畫', sub: '專業顧問團隊', desc: '針對中小企業量身打造的財務診斷服務，優化現金流管理，制定永續成長策略。', cta: '預約諮詢 →',
+      img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80', cp: '#374151', cb: '#F9FAFB' }
+  ],
+  5: [
+    { label: '晨間瑜伽', badge: '生活', thumb: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=225&fit=crop',
+      size: 'square', title: '晨間瑜伽', sub: '找回身心平衡', desc: '每週二、四早晨 7:00，在城市中心的綠意空間，用一小時的流動瑜伽開啟美好的一天。', cta: '預約體驗 →',
+      img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80', cp: '#E879A8', cb: '#FFF5F5' },
+    { label: '手作甜點課', badge: '手作', thumb: 'https://images.unsplash.com/photo-1486427944544-d2c246c4df14?w=300&h=225&fit=crop',
+      size: 'square', title: '法式甜點\n手作課', sub: '零基礎也能上手', desc: '跟著法國藍帶主廚學做馬卡龍、千層派。小班制教學，材料工具全包，成品帶回家。', cta: '報名去 →',
+      img: 'https://images.unsplash.com/photo-1486427944544-d2c246c4df14?w=800&q=80', cp: '#F59E0B', cb: '#FFFBEB' },
+    { label: '花藝課程', badge: '美學', thumb: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=300&h=225&fit=crop',
+      size: 'square', title: '花與日常', sub: '療癒系花藝課程', desc: '學習韓式花藝插花技巧，用鮮花為生活增添色彩。每堂課帶走一束獨一無二的作品。', cta: '預約席位 →',
+      img: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&q=80', cp: '#A855F7', cb: '#FAF5FF' }
+  ],
+  6: [
+    { label: 'CEO 高階研修班', badge: 'VIP', thumb: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=300&h=225&fit=crop',
+      title: 'CEO\n高階研修班', sub: '第八屆菁英限定', desc: '僅限 20 位企業決策者參與。三天兩夜的深度學習之旅，涵蓋策略思維、數位轉型與全球佈局。', cta: '申請入學 →',
+      img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80', cp: '#B8860B', cb: '#080808' },
+    { label: '品酒私塾', badge: '限定', thumb: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=300&h=225&fit=crop',
+      title: '頂級品酒\n私塾課程', sub: '侍酒師親授', desc: '探索法國五大酒莊的風土之旅。每堂品飲 6 款頂級年份酒，由國際認證侍酒師深度導覽。', cta: '限額報名 →',
+      img: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&q=80', cp: '#991B1B', cb: '#0A0A0A' },
+    { label: '私人理財顧問', badge: '菁英', thumb: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=300&h=225&fit=crop',
+      title: '菁英財富\n管理計畫', sub: '年度限額招募中', desc: '專屬理財顧問一對一服務，涵蓋資產配置、稅務規劃與傳承策略。高資產人士的首選。', cta: '預約面談 →',
+      img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80', cp: '#B8860B', cb: '#080808' }
+  ]
+};
+
+/* ═══ RENDER INSPIRATION PANEL ═══ */
+function renderInspirationPanel() {
+  const panel = $('inspPanel');
+  const examples = TPL_EXAMPLES[S.tpl] || [];
+
+  panel.innerHTML = `
+    <div class="insp-header">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <span class="insp-header-text">範例靈感</span>
+      <span class="insp-header-hint">· 點擊套用</span>
+    </div>
+    ${examples.map((ex, i) => `
+      <div class="insp-card" onclick="applyExample(${i})">
+        <img class="insp-card-img" src="${ex.thumb}" alt="${ex.label}" loading="lazy">
+        <span class="insp-card-badge">${ex.badge}</span>
+        <div class="insp-card-body">
+          <div class="insp-card-label">${ex.label}</div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+/* ═══ APPLY EXAMPLE ═══ */
+window.applyExample = function(idx) {
+  const examples = TPL_EXAMPLES[S.tpl];
+  const ex = examples && examples[idx];
+  if (!ex) return;
+
+  // Apply size (use example's size if specified, otherwise keep current)
+  if (ex.size) {
+    S.size = ex.size;
+    document.querySelectorAll('.size-chip').forEach(c => c.classList.toggle('active', c.dataset.size === ex.size));
+  }
+
+  // Apply text
+  S.title = ex.title; S.sub = ex.sub; S.desc = ex.desc; S.cta = ex.cta;
+  $('inpTitle').value = ex.title;
+  $('inpSub').value = ex.sub;
+  $('inpDesc').value = ex.desc;
+  $('inpCta').value = ex.cta;
+
+  // Apply colors
+  S.cp = ex.cp; S.cb = ex.cb;
+  $('cPrimary').value = ex.cp; $('cBg').value = ex.cb;
+  $('cPrimaryHex').textContent = ex.cp; $('cBgHex').textContent = ex.cb;
+
+  // Apply image
+  S.img = ex.img;
+  $('inpUrl').value = ex.img;
+  showThumb();
+  render();
+};
+
+/* ═══ KEYBOARD ═══ */
+document.querySelectorAll('.tpl-card').forEach(c => {
+  c.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') { e.preventDefault(); selectTemplate(+c.dataset.tpl); } });
+});
+
+/* ═══ RESIZE ═══ */
+new ResizeObserver(fitPreview).observe(document.querySelector('.preview-area'));
+
+/* ═══ INIT ═══ */
+render();
+renderInspirationPanel();
+
+})();
+</script>
+
+</body>
+</html>
